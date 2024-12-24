@@ -1,0 +1,112 @@
+body{
+    background-color: #708CB2;
+    align-items: center;
+    text-align: center;
+}
+
+.heading{
+    font-size: 45px;
+    font-family: "Architects Daughter", serif;
+}
+
+.boxContainer{
+    width: 375px;
+    height: 375px;
+
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    grid-template-rows: repeat(5,1fr);
+    
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+    border-radius: 10px;
+    
+    font-size: 50px;
+    font-family: "Questrial", serif;
+    margin: auto;
+}
+
+.boxCnr{
+    background-color: #425C7F;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+}
+
+.boxCmp{
+    background-color: #B3C1CE;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+}
+
+.boxPly{
+    background-color: #AAAAAA;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+
+    cursor: pointer;
+}
+
+.boxPly:hover{
+    background-color: #928E8D; 
+}
+
+#btn{
+    width: 100px;
+    height: 50px; 
+
+    background-color: #AEBDC2;
+
+    font-size: 25px;
+    font-family: "Questrial", serif;
+
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+#btn:hover{
+    background-color: #7D9198; 
+    animation-delay: 1s;
+    animation-duration: 3s; 
+}
+
+.display{
+    font-size: 28px;
+    font-family: "Questrial", serif;   
+}
+
+.displayProduce{
+    font-size: 28px;
+    font-family: "Questrial", serif;    
+}
+
+.picture{
+    width: 45px;
+    height: 45px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    border-radius: 10px;
+}
