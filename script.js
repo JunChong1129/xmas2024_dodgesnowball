@@ -40,37 +40,29 @@ let Stop = 0;
 
 let numCmp ;
 let CmpSide = [0,0,0,0] ;
-let CmpPost = [[0,0],[0,0],[0,0],[0,0]];
-let CmpTimmer ;
+let CmpCoor = [[0,0],[0,0],[0,0],[0,0]];
 
-let A_CmpBoxs = [0,0,0] ;
-let B_CmpBoxs = [0,0,0] ;
-let C_CmpBoxs = [0,0,0] ;
-let D_CmpBoxs = [0,0,0] ;
-let T1_CmpBoxs = [0,0,0,0] ;
-let T2_CmpBoxs = [0,0,0,0] ;
-let T3_CmpBoxs = [0,0,0,0] ;
-let A_CmpId ;
-let B_CmpId ;
-let C_CmpId ;
-let D_CmpId ;
-let CmpId ;
+let A_CmpPost = [0,0,0] ;
+let B_CmpPost = [0,0,0] ;
+let C_CmpPost = [0,0,0] ;
+let D_CmpPost = [0,0,0] ;
+let T_CmpPost = [[0,0,0,0],[0,0,0,0],[0,0,0,0]] ;
+
+let numCmpBox = 0 ;
+let A_CmpBox ;
+let B_CmpBox ;
+let C_CmpBox ;
+let D_CmpBox ;
+let CmpTimmer ;
+let numCmpRound = 1 ;
 
 btn.onclick = startGame ;
 function startGame(){
     if(Start==0){
-        Game = 0 ;
-        PlyBox = Ply5 ;
-        PlyPost = 5 ;
-        A = 2 ;
-        B = 2 ;
-
         Start = 1 ;
-
         btn.style.backgroundColor = "#5A626B" ;
-
+        resetGame()
         getPly();
-        resetGame();
         genCmp();
     }
 }
@@ -163,8 +155,7 @@ function getPly(){
     Ply8.addEventListener("click",chgClick);
     Ply9.addEventListener("click",chgClick);
     function chgClick(event){
-        let ignoreO = event.target.textContent ;
-        
+        let ignoreO = event.target.textContent ;    
         if(ignoreO!="O")
         {
             PlyBox.textContent = PlyPost ;
@@ -184,13 +175,12 @@ function getPly(){
                 case "9" : PlyBox = Ply9; A=3; B=3; break;
             }
         }
-
         displayContent();
     }
 }
 
 function genCmp(){
-    let sideRdmCmp, postRdmCmp ;
+    let sideRdmCmp, coorRdmCmp ;
     let CmpVer=0 , CmpHor=0 ;
 
     // Number of Cmp
@@ -242,52 +232,52 @@ function genCmp(){
 
         if(sideRdmCmp==1)
         {
-            CmpPost[i][0] = 0;
+            CmpCoor[i][0] = 0;
             CmpVer++;
         }
         else if(sideRdmCmp==2)
         {
-            CmpPost[i][0] = 4;
+            CmpCoor[i][0] = 4;
             CmpVer++;
         }   
         else if(sideRdmCmp==3)
         {
-            CmpPost[i][1] = 0;
+            CmpCoor[i][1] = 0;
             CmpHor++;
         }
         else
         {
-            CmpPost[i][1] = 4; 
+            CmpCoor[i][1] = 4; 
             CmpHor++;
         }
 
         if((sideRdmCmp==1||sideRdmCmp==2)&&CmpVer!=2)
-            CmpPost[i][1] = B;
+            CmpCoor[i][1] = B;
         else if((sideRdmCmp==3||sideRdmCmp==4)&&CmpHor!=2)
-            CmpPost[i][0] = A; 
+            CmpCoor[i][0] = A; 
         else if(sideRdmCmp==1||sideRdmCmp==2)
         {
             do
             {
-                postRdmCmp = Math.ceil(Math.random()*3); 
-            }while(postRdmCmp==B)
-            CmpPost[i][1] = postRdmCmp;
+                coorRdmCmp = Math.ceil(Math.random()*3); 
+            }while(coorRdmCmp==B)
+            CmpCoor[i][1] = coorRdmCmp;
         }
         else
         {
             do
             {
-                postRdmCmp = Math.ceil(Math.random()*3); 
-            }while(postRdmCmp==A)
-            CmpPost[i][0] = postRdmCmp;            
+                coorRdmCmp = Math.ceil(Math.random()*3); 
+            }while(coorRdmCmp==A)
+            CmpCoor[i][0] = coorRdmCmp;            
         }      
     }
 
     // Display of Cmp
     for(i=0;i<numCmp;i++)
     {
-        x = CmpPost[i][0];
-        y = CmpPost[i][1];
+        x = CmpCoor[i][0];
+        y = CmpCoor[i][1];
 
         if(x==0)
             switch(y)
@@ -337,293 +327,210 @@ function genCmp(){
     else
         CmpTimmer = 500 ;
 
-    setTimeout(disCmp,750);
+    postCmp();
 }
 
-function disCmp(){
-    let CmpBoxs = [ 0 , 0 , 0 ] ;
+function postCmp(){
+    let CmpPost = [0,0,0] ;
 
     for(i=0;i<numCmp;i++)
     {
-        x = CmpPost[i][0] ;
-        y = CmpPost[i][1] ;
+        x = CmpCoor[i][0] ;
+        y = CmpCoor[i][1] ;
 
         if(x==0)
             switch(y)
             {
-                case 1 : CmpBoxs = [1,4,7] ; break;
-                case 2 : CmpBoxs = [2,5,8] ; break;
-                case 3 : CmpBoxs = [3,6,9] ; break;
+                case 1 : CmpPost = [1,4,7] ; break;
+                case 2 : CmpPost = [2,5,8] ; break;
+                case 3 : CmpPost = [3,6,9] ; break;
             }
         else if(x==4)
             switch(y)
             {
-                case 1 : CmpBoxs = [7,4,1] ; break;
-                case 2 : CmpBoxs = [8,5,2] ; break;
-                case 3 : CmpBoxs = [9,6,3] ; break;
+                case 1 : CmpPost = [7,4,1] ; break;
+                case 2 : CmpPost = [8,5,2] ; break;
+                case 3 : CmpPost = [9,6,3] ; break;
             }       
         else if(y==0) 
             switch(x)
             {
-                case 1 : CmpBoxs = [1,2,3] ; break;
-                case 2 : CmpBoxs = [4,5,6] ; break;
-                case 3 : CmpBoxs = [7,8,9] ; break;
+                case 1 : CmpPost = [1,2,3] ; break;
+                case 2 : CmpPost = [4,5,6] ; break;
+                case 3 : CmpPost = [7,8,9] ; break;
             }  
         else    
             switch(x)
             {
-                case 1 : CmpBoxs = [3,2,1] ; break;
-                case 2 : CmpBoxs = [6,5,4] ; break;
-                case 3 : CmpBoxs = [9,8,7] ; break;
+                case 1 : CmpPost = [3,2,1] ; break;
+                case 2 : CmpPost = [6,5,4] ; break;
+                case 3 : CmpPost = [9,8,7] ; break;
             } 
 
         if(i==0)
-            A_CmpBoxs = CmpBoxs;
+            A_CmpPost = CmpPost;
         else if(i==1)
-            B_CmpBoxs = CmpBoxs;   
+            B_CmpPost = CmpPost;   
         else if(i==2)
-            C_CmpBoxs = CmpBoxs;   
+            C_CmpPost = CmpPost;   
         else
-            D_CmpBoxs = CmpBoxs;     
+            D_CmpPost = CmpPost;     
     }
 
     for(i=0;i<numCmp;i++)
     {
         if(i==0)
-        {
-            T1_CmpBoxs[i] = A_CmpBoxs[0] ;
-            T2_CmpBoxs[i] = A_CmpBoxs[1] ;
-            T3_CmpBoxs[i] = A_CmpBoxs[2] ;
-        }
+            CmpPost = A_CmpPost;
         else if(i==1)
-        {
-            T1_CmpBoxs[i] = B_CmpBoxs[0] ;  
-            T2_CmpBoxs[i] = B_CmpBoxs[1] ;
-            T3_CmpBoxs[i] = B_CmpBoxs[2] ;            
-        }
+            CmpPost = B_CmpPost;
         else if(i==2)
-        {
-            T1_CmpBoxs[i] = C_CmpBoxs[0] ;  
-            T2_CmpBoxs[i] = C_CmpBoxs[1] ;
-            T3_CmpBoxs[i] = C_CmpBoxs[2] ;            
-        }
+            CmpPost = C_CmpPost;
         else
-        {
-            T1_CmpBoxs[i] = D_CmpBoxs[0] ;  
-            T2_CmpBoxs[i] = D_CmpBoxs[1] ;
-            T3_CmpBoxs[i] = D_CmpBoxs[2] ;               
-        }
+            CmpPost = D_CmpPost;
+
+        T_CmpPost[0][i] = CmpPost[0];
+        T_CmpPost[1][i] = CmpPost[1];
+        T_CmpPost[2][i] = CmpPost[2];
     }
 
+    boxsCmp();
+}
+
+function boxsCmp(){
+    let CmpBox ;
+
     for(i=0;i<numCmp;i++)
-    {
-        switch(T1_CmpBoxs[i])
+    {    
+        switch(T_CmpPost[numCmpBox][i])
         {
-            case 1 : CmpId = Ply1 ; break;
-            case 2 : CmpId = Ply2 ; break;
-            case 3 : CmpId = Ply3 ; break;
-            case 4 : CmpId = Ply4 ; break;
-            case 5 : CmpId = Ply5 ; break;
-            case 6 : CmpId = Ply6 ; break;
-            case 7 : CmpId = Ply7 ; break;
-            case 8 : CmpId = Ply8 ; break;
-            case 9 : CmpId = Ply9 ; break;            
+            case 1 : CmpBox = Ply1 ; break;
+            case 2 : CmpBox = Ply2 ; break;
+            case 3 : CmpBox = Ply3 ; break;
+            case 4 : CmpBox = Ply4 ; break;
+            case 5 : CmpBox = Ply5 ; break;
+            case 6 : CmpBox = Ply6 ; break;
+            case 7 : CmpBox = Ply7 ; break;
+            case 8 : CmpBox = Ply8 ; break;
+            case 9 : CmpBox = Ply9 ; break;            
         }
 
         if(i==0)
-            A_CmpId = CmpId ;
+            A_CmpBox = CmpBox ;
         else if(i==1)
-            B_CmpId = CmpId ;
+            B_CmpBox = CmpBox ;
         else if(i==2)
-            C_CmpId = CmpId ;
+            C_CmpBox = CmpBox ;
         else
-            D_CmpId = CmpId ;
+            D_CmpBox = CmpBox ;
     }
 
-    setTimeout(function(){
+    if(numCmpRound==1)
+        CmpTimmer = 1000 ;
+    else
+        CmpTimmer = 250 ;
 
-        for(i=0;i<numCmp;i++)
+    if(numCmpBox==0)
+        setTimeout(function(){
+            displayBall();
+            checkGame();
+        }, CmpTimmer);
+    else
+    {
+        displayBall();
+        checkGame()
+    }
+}
+
+function displayBall(){
+    for(i=0;i<numCmp;i++)
+    {
+        if(i==0)
+            A_CmpBox.textContent = PC ;
+        else if(i==1) 
+            B_CmpBox.textContent = PC ;
+        else if(i==2)
+            C_CmpBox.textContent = PC ;
+        else
+            D_CmpBox.textContent = PC ;
+    }
+}
+
+function checkGame(){
+    for(i=0;i<numCmp;i++)
+        if(T_CmpPost[numCmpBox][i]==PlyPost)
+            Stop = 1 ;
+
+    if(Stop==0)
+    {
+        if(numCmpRound==1)
         {
-            if(i==0)
-                A_CmpId.textContent = PC ;
-            else if(i==1) 
-                B_CmpId.textContent = PC ;
-            else if(i==2)
-                C_CmpId.textContent = PC ;
+            if(numCmpBox==0)
+                CmpTimmer = 1000 ;
             else
-                D_CmpId.textContent = PC ;
+                CmpTimmer = 250 ;
         }
+        else
+            CmpTimmer = 250 ;
 
-        checkFirst();
-    }, CmpTimmer);
-}
+        if(numCmpBox<2)
+        {
+            setTimeout(function(){
+                clearBall();
+                boxsCmp();
+            }, CmpTimmer);                   
+        }
+        else
+        {
+            setTimeout(function(){
 
-function checkFirst(){
-    for(i=0;i<numCmp;i++)
-        if(T1_CmpBoxs[i]==PlyPost)
-            Stop = 1 ;
-
-    if(Stop==0)
-        setTimeout(function(){
-            for(i=0;i<numCmp;i++)
-            {
-                if(i==0)
-                    A_CmpId.textContent = T1_CmpBoxs[i] ;
-                else if(i==1) 
-                    B_CmpId.textContent = T1_CmpBoxs[i] ;
-                else if(i==2)
-                    C_CmpId.textContent = T1_CmpBoxs[i] ;
-                else
-                    D_CmpId.textContent = T1_CmpBoxs[i] ;                
-            }
-
-            for(i=0;i<numCmp;i++)
-            {
-                switch(T2_CmpBoxs[i])
+                if(numCmpRound==1)
                 {
-                    case 1 : CmpId = Ply1 ; break;
-                    case 2 : CmpId = Ply2 ; break;
-                    case 3 : CmpId = Ply3 ; break;
-                    case 4 : CmpId = Ply4 ; break;
-                    case 5 : CmpId = Ply5 ; break;
-                    case 6 : CmpId = Ply6 ; break;
-                    case 7 : CmpId = Ply7 ; break;
-                    case 8 : CmpId = Ply8 ; break;
-                    case 9 : CmpId = Ply9 ; break;            
+                    numCmpRound ++ ;
+                    clearBall();
+                    numCmpBox = 0 ;
+                    boxsCmp();
                 }
-        
-                if(i==0)
-                    A_CmpId = CmpId ;
-                else if(i==1)
-                    B_CmpId = CmpId ;
-                else if(i==2)
-                    C_CmpId = CmpId ;
                 else
-                    D_CmpId = CmpId ;
-            }
-
-            for(i=0;i<numCmp;i++)
-            {
-                if(i==0)
-                    A_CmpId.textContent = PC ;
-                else if(i==1) 
-                    B_CmpId.textContent = PC ;
-                else if(i==2)
-                    C_CmpId.textContent = PC ;
-                else
-                    D_CmpId.textContent = PC ;
-            }
-      
-            checkSecond();           
-        }, CmpTimmer);
-    else
-    {
-        window.alert("You lose...");
-        window.location.reload(true);
-    }
-}  
-
-function checkSecond(){
-    for(i=0;i<numCmp;i++)
-        if(T2_CmpBoxs[i]==PlyPost)
-            Stop = 1 ;
-        
-    if(Stop==0)
-        setTimeout(function(){
-            for(i=0;i<numCmp;i++)
-            {
-                if(i==0)
-                    A_CmpId.textContent = T2_CmpBoxs[i] ;
-                else if(i==1) 
-                    B_CmpId.textContent = T2_CmpBoxs[i] ;
-                else if(i==2)
-                    C_CmpId.textContent = T2_CmpBoxs[i] ;
-                else
-                    D_CmpId.textContent = T2_CmpBoxs[i] ;                
-            }
-
-            for(i=0;i<numCmp;i++)
-            {
-                switch(T3_CmpBoxs[i])
                 {
-                    case 1 : CmpId = Ply1 ; break;
-                    case 2 : CmpId = Ply2 ; break;
-                    case 3 : CmpId = Ply3 ; break;
-                    case 4 : CmpId = Ply4 ; break;
-                    case 5 : CmpId = Ply5 ; break;
-                    case 6 : CmpId = Ply6 ; break;
-                    case 7 : CmpId = Ply7 ; break;
-                    case 8 : CmpId = Ply8 ; break;
-                    case 9 : CmpId = Ply9 ; break;            
+                    numCmpRound -- ;
+                    numCmpBox = 0 ;
+
+                    if(Game<4)
+                    {
+                        Game++ ;
+                        resetGame();
+                        genCmp();
+                    }
+                    else
+                    {
+                        window.alert("WoW, You Win!!!");      
+                        window.location.reload(true);            
+                    }
                 }
-        
-                if(i==0)
-                    A_CmpId = CmpId ;
-                else if(i==1)
-                    B_CmpId = CmpId ;
-                else if(i==2)
-                    C_CmpId = CmpId ;
-                else
-                    D_CmpId = CmpId ;
-            }
 
-            for(i=0;i<numCmp;i++)
-            {
-                if(i==0)
-                    A_CmpId.textContent = PC ;
-                else if(i==1) 
-                    B_CmpId.textContent = PC ;
-                else if(i==2)
-                    C_CmpId.textContent = PC ;
-                else
-                    D_CmpId.textContent = PC ;
-            }
-
-            checkThird(); 
-        }, CmpTimmer);
-    else
-    {
-        window.alert("You lose...");
-        window.location.reload(true);
-    }    
-}
-
-function checkThird(){
-    for(i=0;i<numCmp;i++)
-        if(T3_CmpBoxs[i]==PlyPost)
-            Stop = 1 ;   
-    
-    if(Stop==0)
-    {
-        setTimeout(function(){
-            for(i=0;i<numCmp;i++)
-            {
-                if(i==0)
-                    A_CmpId.textContent = T3_CmpBoxs[i] ;
-                else if(i==1) 
-                    B_CmpId.textContent = T3_CmpBoxs[i] ;
-                else if(i==2)
-                    C_CmpId.textContent = T3_CmpBoxs[i] ;
-                else
-                    D_CmpId.textContent = T3_CmpBoxs[i] ;                
-            }   
-
-            if(Game<4)
-            {
-                Game++;
-                resetGame();
-                genCmp();
-            }            
-            else
-            {
-                window.alert("WoW, You Win!!!");      
-                window.location.reload(true);
-            } 
-        }, CmpTimmer);
+            }, 250);
+        }
     }
     else
     {
         window.alert("You lose...");
         window.location.reload(true);
-    }    
+    }
+}
+
+function clearBall()
+{
+    for(i=0;i<numCmp;i++)
+    {
+        if(i==0)
+            A_CmpBox.textContent = T_CmpPost[numCmpBox][i] ;
+        else if(i==1) 
+            B_CmpBox.textContent = T_CmpPost[numCmpBox][i] ;
+        else if(i==2)
+            C_CmpBox.textContent = T_CmpPost[numCmpBox][i] ;
+        else
+            D_CmpBox.textContent = T_CmpPost[numCmpBox][i] ;                
+    }
+
+    numCmpBox ++ ;
 }
