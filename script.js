@@ -467,7 +467,7 @@ function checkGame(){
             if(numCmpBox==0)
                 CmpTimmer = 1000 ;
             else
-                CmpTimmer = 250 ;
+                CmpTimmer = 525 ;
         }
         else
             CmpTimmer = 250 ;
